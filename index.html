@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>投诉页面</title>
+</head>
+<body>
+    <h1>投诉页面</h1>
+    <p>请选择投诉类型：</p>
+    <form>
+        <label for="type">投诉类型：</label>
+        <select id="type" name="type">
+            <option value="service">服务问题</option>
+            <option value="product">产品问题</option>
+            <option value="billing">账单问题</option>
+            <option value="other">其他</option>
+        </select>
+        <br><br>
+        <label for="details">投诉详情：</label>
+        <textarea id="details" name="details" rows="4" cols="50"></textarea>
+        <br><br>
+        <input type="submit" value="提交投诉">
+    </form>
+</body>
+</html>
