@@ -1,26 +1,421 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="zh-CN">
+
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>投诉页面</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <!-- 引入样式文件 -->
+  <link rel="stylesheet" href="https://fastly.jsdelivr.net/npm/vant@4/lib/index.css" />
+
+  <!-- 引入 Vue 和 Vant 的 JS 文件 -->
+  <script src="https://fastly.jsdelivr.net/npm/vue@3"></script>
+  <script src="https://fastly.jsdelivr.net/npm/vant@4/lib/vant.min.js"></script>
+  <title>投诉</title>
+  <style>
+
+  </style>
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background-color: #ededed;
+    }
+
+    .container {
+      max-width: 100%;
+      background-color: #FFFFFF;
+    }
+
+    .title-bar {
+      background-color: #ededed;
+      padding: 8px;
+      font-size: 14px;
+      color: #888888;
+      border-bottom: 1px solid #E6E6E6;
+    }
+
+    .title-bar:empty {
+      display: none;
+    }
+
+    .menu-item {
+      background-color: #FFFFFF;
+      padding: 15px;
+      border-bottom: 1px solid #E6E6E6;
+      font-size: 17px;
+      color: #333333;
+      text-decoration: none;
+      display: block;
+      width: 100%;
+      box-sizing: border-box;
+    }
+
+    .menu-item:last-child {
+      border-bottom: none;
+    }
+
+    .footer {
+      text-align: center;
+      color: #666666;
+      font-size: 13px;
+      padding: 15px;
+      background-color: #ededed;
+    }
+
+    .hidden {
+      display: none;
+    }
+  </style>
+  <style>
+    .tips {
+      position: absolute;
+      right: 20px;
+      bottom: 15px;
+      display: inline;
+      width: 50px;
+      font-size: 17px;
+      color: #bcbcbc;
+      text-align: right;
+    }
+
+    #myTextarea {
+      position: relative;
+      border: none;
+      padding-left: 20px;
+      font-size: 17px;
+      padding: 0px;
+      outline: none;
+      width: 100%;
+      min-height: 48px;
+      line-height: 20px;
+    }
+
+    #myTextarea::placeholder {
+      position: relative;
+      border: none;
+      padding-left: 20px;
+      font-size: 17px;
+      color: #bcbcbc;
+      padding: 0px;
+      outline: none;
+      width: 100%;
+      min-height: 48px;
+      line-height: 20px;
+    }
+
+    .imagesBox {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .imagesBox span {
+      color: #bcbcbc;
+    }
+
+    .input {
+      border: none;
+      padding-left: 20px;
+      font-size: 17px;
+      height: 20px;
+      line-height: 20px;
+      outline: none;
+      width: 50%;
+    }
+
+    .input::placeholder {
+      border: none;
+      font-size: 17px;
+      height: 20px;
+      line-height: 20px;
+      color: #bcbcbc;
+      outline: none;
+    }
+
+
+    button {
+      width: 49.5%;
+      height: 40px;
+      border: none;
+      color: white;
+      margin: auto;
+      display: block;
+      font-size: 18px;
+      background-color: #46bc5c;
+      margin-top: 34px;
+      border-radius: 5px;
+    }
+
+    #upload:target {
+      display: block;
+    }
+  </style>
+  <script>
+    window.menuId = 'menu-main'
+    window.addEventListener('popstate', function (event) {
+      // Hide all menus
+      var menus = document.querySelectorAll('.menu-list');
+      menus.forEach(function (menu) {
+        menu.classList.add('hidden');
+      });
+
+      var selectedMenu = document.getElementById(window.menuId);
+      console.log(window.menuId)
+      selectedMenu.classList.remove('hidden');
+      window.menuId = 'menu-main'
+
+    });
+
+
+
+
+    function showMenu (menuId, title, id) {
+      // Hide all menus
+      var menus = document.querySelectorAll('.menu-list');
+      menus.forEach(function (menu) {
+        menu.classList.add('hidden');
+      });
+
+      // Show the selected menu
+      var selectedMenu = document.getElementById(menuId);
+      selectedMenu.classList.remove('hidden');
+
+      let url = window.location.href + '#' + menuId
+      history.pushState(null, null, url);
+      if (id) {
+        window.menuId = id
+      } else {
+        window.menuId = 'menu-main'
+      }
+      document.getElementById('title-bar').textContent = title;
+    }
+    function showSucess () {
+      document.querySelector('.container').style.display = 'none'
+      var sucess = document.getElementById('sucess');
+      sucess.classList.remove('hidden');
+    }
+    function selectFile () {
+      let input = document.createElement('input')
+      input.type = 'file'
+      input.click()
+      input.onchange = (file) => {
+        console.log(input.files)
+      }
+    }
+  </script>
+
 </head>
+
 <body>
-    <h1>投诉页面</h1>
-    <p>请选择投诉类型：</p>
-    <form>
-        <label for="type">投诉类型：</label>
-        <select id="type" name="type">
-            <option value="service">服务问题</option>
-            <option value="product">产品问题</option>
-            <option value="billing">账单问题</option>
-            <option value="other">其他</option>
-        </select>
-        <br><br>
-        <label for="details">投诉详情：</label>
-        <textarea id="details" name="details" rows="4" cols="50"></textarea>
-        <br><br>
-        <input type="submit" value="提交投诉">
-    </form>
+  <div id="sucess" class="hidden">
+    <div
+      style="text-align: center; display: flex; flex-direction: column; justify-content: center; align-items: center; height: 100vh;">
+      <svg style="width: 54px; height: 54px; overflow: hidden; margin-top: 52px;" t="1724068275957" class="icon"
+        viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="2364" width="256" height="256">
+        <path
+          d="M0 512C0 229.234759 229.234759 0 512 0s512 229.234759 512 512-229.234759 512-512 512S0 794.765241 0 512z m419.310345 194.630621a35.310345 35.310345 0 0 0 49.399172 1.271172l335.518897-311.931586a35.310345 35.310345 0 0 0-48.075035-51.729655l-309.124413 289.544827-145.125518-149.645241a35.310345 35.310345 0 1 0-50.688 49.169655l168.112552 173.320828z"
+          fill="#08c060" p-id="2365"></path>
+      </svg>
+
+      <p style="margin-top: 46px; font-size: 24px; font-weight: bold;">投诉已提交</p>
+      <p style="font-size: 16px; padding: 12px 45px 0px 45px; margin: 0px;  line-height: 26px;">微信团队会尽快核实，并通过“微信团队”通知
+        你审核结果。感谢你的支持。</p>
+
+      <button style="margin-top: auto; margin-bottom: 90px;" onclick="  WeixinJSBridge.call('closeWindow');">关闭</button>
+    </div>
+
+  </div>
+
+  <div id="app" class="container">
+
+
+    <!-- 一级菜单 -->
+    <div class="title-bar" id="title-bar">
+      请选择投诉该账号的原因：
+    </div>
+    <div class="menu-list" id="menu-main">
+      <a class="menu-item" onclick="showMenu('menu-harassment', '请选择哪一类违法内容：')">发布不适当内容对我造成骚扰</a>
+      <a class="menu-item" onclick="showMenu('menu-scam', '请选择哪一类诈骗内容：')">存在欺诈骗钱行为</a>
+      <a class="menu-item" onclick="showMenu('upload')">此账号可能被盗用了</a>
+      <a class="menu-item" onclick="showMenu('upload')">存在侵权行为(侵犯知识产权、人身权)</a>
+      <a class="menu-item" onclick="showMenu('upload')">发布仿冒品信息</a>
+      <a class="menu-item" onclick="showMenu('upload')">冒充他人</a>
+      <a class="menu-item" onclick="showMenu('upload')">侵犯未成年⼈权益</a>
+      <a class="menu-item" onclick="showMenu('upload')">粉丝无底线追星行为</a>
+    </div>
+
+    <!-- 二级菜单：发布不适当内容对我造成骚扰 -->
+    <div class="menu-list hidden" id="menu-harassment">
+      <a class="menu-item" onclick="showMenu('upload','','menu-harassment')">色情</a>
+      <a class="menu-item" onclick="showMenu('upload','','menu-harassment')">违法犯罪及违禁品</a>
+      <a class="menu-item" onclick="showMenu('upload','','menu-harassment')">赌博</a>
+      <a class="menu-item" onclick="showMenu('upload','','menu-harassment')">政治谣言</a>
+      <a class="menu-item" onclick="showMenu('upload','','menu-harassment')">暴恐血腥</a>
+      <a class="menu-item" onclick="showMenu('upload','','menu-harassment')">自杀自残</a>
+      <a class="menu-item" onclick="showMenu('upload','','menu-harassment')">其他违规内容</a>
+    </div>
+
+    <!-- 二级菜单：存在欺诈骗钱行为 -->
+    <div class="menu-list hidden" id="menu-scam">
+      <a class="menu-item" onclick="showMenu('upload','','menu-scam')">金融诈骗</a>
+      <a class="menu-item" onclick="showMenu('upload','','menu-scam')">网络兼职刷单诈骗</a>
+      <a class="menu-item" onclick="showMenu('upload','','menu-scam')">返利诈骗</a>
+      <a class="menu-item" onclick="showMenu('upload','','menu-scam')">网络交友诈骗</a>
+      <a class="menu-item" onclick="showMenu('upload','','menu-scam')">虚假投资理财诈骗</a>
+      <a class="menu-item" onclick="showMenu('upload','','menu-scam')">赌博诈骗</a>
+      <a class="menu-item" onclick="showMenu('upload','','menu-scam')">收款不发货</a>
+      <a class="menu-item" onclick="showMenu('upload','','menu-scam')">仿冒他人诈骗</a>
+      <a class="menu-item" onclick="showMenu('upload','','menu-scam')">免费送诈骗</a>
+      <a class="menu-item" onclick="showMenu('upload','','menu-scam')">游戏相关诈骗(代练/充值等)</a>
+      <a class="menu-item" onclick="showMenu('upload','','menu-scam')">其他诈骗行为</a>
+    </div>
+
+    <!-- 二级菜单：此账号可能被盗用了 -->
+    <div class="menu-list hidden" id="menu-hacked">
+      <a class="menu-item">提交给微信团队审核</a>
+    </div>
+
+    <div class="menu-list hidden" id="upload">
+      <div class="menu-item">
+        <label>联系方式</label>
+        <input type="text" class="input" maxlength="11" placeholder="填写联系方式">
+      </div>
+      <div class="menu-item">
+        <div class="imagesBox">
+          <label>图片证据(选填)</label>
+          <span>{{fileList.length}}张/9</span>
+        </div>
+        <!-- <div onclick="selectFile()"
+          style="width: 100px; height: 100px; background-color: #ededed; margin-top: 20px;color: #bcbcbc; font-size: 50px; font-weight:lighter; display: flex; justify-content: center; align-items: center;">
+          <svg style="width: 50px; height: 50px;" t="1724069126520" class="icon" viewBox="0 0 1024 1024" version="1.1"
+            xmlns="http://www.w3.org/2000/svg" p-id="2375" width="256" height="256">
+            <path
+              d="M512 512V170.666667h42.666667v341.333333h341.333333v42.666667h-341.333333v341.333333h-42.666667v-341.333333H170.666667v-42.666667h341.333333z"
+              fill="#a6a6a6" p-id="2376"></path>
+          </svg>
+        </div> -->
+        <div style=" margin-top: 20px;">
+          <van-uploader v-model="fileList" upload-icon="plus" :after-read="afterRead" multiple :max-count="9"
+            @oversize="onOversize"></van-uploader>
+        </div>
+
+
+      </div>
+      <div class="menu-item" style="position: relative;">
+        <textarea rows="3" placeholder="投诉内容(选填)" id="myTextarea" maxlength="200"></textarea>
+        <div class="tips">
+          <span id="remainingChars">0</span>/200
+        </div>
+      </div>
+
+      <div class="footer ">
+        <button onclick="showSucess()">提交</button>
+      </div>
+    </div>
+
+    <div class="footer">
+      
+    </div>
+  </div>
+
+
+  <script>
+    const {
+      ref,
+      createApp
+    } = Vue
+
+    // 在 #app 标签下渲染一个按钮组件
+    const app = Vue.createApp({
+      setup () {
+        const fileList = ref([]);
+        const onOversize = (file) => {
+          console.log(file);
+          vant.showToast('文件大小不能超过 500kb');
+        };
+        const _upload = async (info) => {
+          return new Promise((resolve, reject) => {
+            let file = info.file;
+            const fileInput = document.getElementById('image');
+            const formData = new FormData();
+            formData.append('image', file);
+
+            const xhr = new XMLHttpRequest();
+            xhr.open('POST', 'upload.php', true);
+
+            xhr.onload = function () {
+              var json = JSON.parse(xhr.responseText);
+              if (xhr.status === 200) {
+                resolve(json)
+              } else {
+                vant.showToast('上传失败');
+                reject(false)
+              }
+            };
+
+            xhr.send(formData);
+          })
+        };
+
+        const _doUp = async (file) => {
+          return
+        }
+
+        const afterRead = async (files) => {
+          if (files.length > 1) {
+            for (const file of files) {
+              await _doUp(file)
+            }
+            return
+          }
+          _doUp(files)
+        };
+        const submit = () => {
+          let file = fileList.value.filter((item) => {
+            return item.phpname
+          })
+
+          document.getElementById('imageBox').value = JSON.stringify(file.map((item) => item.phpname))
+          $.ajax({
+            type: 'post',
+            url: "?op=add&id=<?= $id ?>&wangdian=<?= $_SESSION[wangdian] ?>",
+            data: $("#myform").serialize(),
+            success: function (data) {
+              //alert(data);return;
+              window.location.href = '../ok.php'
+            }
+          });
+        }
+        return {
+          submit,
+          afterRead,
+          onOversize,
+          fileList,
+        };
+      },
+    });
+    app.use(vant);
+    // app.use(vant.Lazyload);
+    app.mount('#app');
+  </script>
+  <script>
+    // 获取 textarea 和 剩余字数显示元素
+    const textarea = document.getElementById('myTextarea');
+    const remainingCharsDisplay = document.getElementById('remainingChars');
+
+    // 定义最大字符数
+    const maxChars = textarea.getAttribute('maxlength');
+
+    // 添加输入事件监听
+    textarea.addEventListener('input', function () {
+      // 计算剩余字数
+      const remainingChars = textarea.value.length;
+
+      // 更新剩余字数显示
+      remainingCharsDisplay.textContent = remainingChars;
+    });
+
+  </script>
 </body>
+
 </html>
